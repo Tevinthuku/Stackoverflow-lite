@@ -28,6 +28,20 @@ This app is a small mimicking version of Stackoverflow where users can create ac
         python run.py
 ```
 
+# Pivotal Tracker tasks
+
+> **[Pivotal Tracker Board Stories](https://www.pivotaltracker.com/n/projects/2240990)**
+
+
+
+## Questioner API Endpoints
+
+| Method | Endpoint            | Description                           |
+| ------ | ------------------- | ------------------------------------- |
+| `GET`  | `/api/v1/questions` | View All questions created in the app |
+
+|         |
+
 ### Author: TevinThuku
 
 ### Credits: Andela
