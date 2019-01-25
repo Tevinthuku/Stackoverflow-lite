@@ -2,12 +2,8 @@ astroid==2.1.0
 atomicwrites==1.2.1
 attrs==18.2.0
 autopep8==1.4.3
-certifi==2018.11.29
-chardet==3.0.4
 Click==7.0
-coverage==4.5.2
 Flask==1.0.2
-idna==2.8
 isort==4.3.4
 itsdangerous==1.1.0
 Jinja2==2.10
@@ -20,12 +16,7 @@ py==1.7.0
 pycodestyle==2.4.0
 pylint==2.2.2
 pytest==4.1.1
-pytest-cov==2.6.1
-python-coveralls==2.9.1
-PyYAML==3.13
-requests==2.21.0
 six==1.12.0
 typed-ast==1.2.0
-urllib3==1.24.1
 Werkzeug==0.14.1
 wrapt==1.11.1
