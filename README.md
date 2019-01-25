@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/Tevinthuku/Stackoverflow-lite.svg?branch=master)](https://travis-ci.org/Tevinthuku/Stackoverflow-lite)
 
+[![Coverage Status](https://coveralls.io/repos/github/Tevinthuku/Stackoverflow-lite/badge.svg?branch=master)](https://coveralls.io/github/Tevinthuku/Stackoverflow-lite?branch=master)
+
 
 ### Stackoverflow-lite
 
