@@ -7,7 +7,6 @@ install:
   - pip install python-coveralls
 # command to run tests
 script:
-  - pytest
-  - coverage run pytest -v && coverage report
+  - pytest --cov=app -v
 after_success:
   - coveralls
