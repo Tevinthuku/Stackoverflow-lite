@@ -17,9 +17,16 @@ This app is a small mimicking version of Stackoverflow where users can create ac
    ```
 
 3. Install dependencies
+
    ```bash
         pip install -r requirements.txt
    ```
+
+4. Run the app
+
+```bash
+        python run.py
+```
 
 ### Author: TevinThuku
 
