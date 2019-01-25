@@ -8,6 +8,6 @@ install:
 # command to run tests
 script:
   - pytest
-  - coverage run pytest tests && coverage report
+  - coverage run pytest -v && coverage report
 after_success:
   - coveralls
