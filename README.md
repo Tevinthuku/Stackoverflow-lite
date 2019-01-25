@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Tevinthuku/Stackoverflow-lite.svg?branch=master)](https://travis-ci.org/Tevinthuku/Stackoverflow-lite)
+
+
 ### Stackoverflow-lite
 
 This app is a small mimicking version of Stackoverflow where users can create accounts, log in, post questions, answer available questions, upvote questions
