@@ -48,13 +48,14 @@ This app is a small mimicking version of Stackoverflow where users can create ac
 
 ## Stackoverflow-endpoints API Endpoints
 
-| Method | Endpoint                             | Description                           |
-| ------ | ------------------------------------ | ------------------------------------- |
-| `GET`  | `/api/v1/questions`                  | View All questions created in the app |
-| `POST` | `/api/v1/questions`                  | Post a question                       |
-| `GET`  | `/api/v1/questions/<int:questionId>` | Fetch a specific question             |
-| `POST` | `/api/v1/auth/signup`                | Register a user                       |
-| `POST` | `/api/v1/auth/login`                 | Login a user                          |
+| Method | Endpoint                                    | Description                           |
+| ------ | ------------------------------------------- | ------------------------------------- |
+| `GET`  | `/api/v1/questions`                         | View All questions created in the app |
+| `POST` | `/api/v1/questions`                         | Post a question                       |
+| `GET`  | `/api/v1/questions/<int:questionId>`        | Fetch a specific question             |
+| `POST` | `/api/v1/auth/signup`                       | Register a user                       |
+| `POST` | `/api/v1/auth/login`                        | Login a user                          |
+| `POST` | `api/v1/questions/<int:questionId>/answers` | Post an answer to a question          |
 
 
 ### Author: TevinThuku
