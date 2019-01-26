@@ -38,14 +38,13 @@ This app is a small mimicking version of Stackoverflow where users can create ac
 > **[Pivotal Tracker Board Stories](https://www.pivotaltracker.com/n/projects/2240990)**
 
 
+## Stackoverflow-endpoints API Endpoints
 
-## Questioner API Endpoints
-
-| Method | Endpoint            | Description                           |
-| ------ | ------------------- | ------------------------------------- |
-| `GET`  | `/api/v1/questions` | View All questions created in the app |
-
-|         |
+| Method | Endpoint              | Description                           |
+| ------ | --------------------- | ------------------------------------- |
+| `GET`  | `/api/v1/questions`   | View All questions created in the app |
+| `POST` | `/api/v1/auth/signup` | Register a user                       |
+| `POST` | `/api/v1/auth/login`  | Login a user                          |
 
 ### Author: TevinThuku
 
