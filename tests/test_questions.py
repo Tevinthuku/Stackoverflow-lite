@@ -28,7 +28,6 @@ class RoutesBaseTest(unittest.TestCase):
 
         self.post_question1 = {"title": "What is Dev?",
                                "creator_id": 1,
-                               "question_id": 1,
                                "body": "I really like how people talk about Tony's Dev"}
 
         self.token = ""
@@ -59,13 +58,13 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         self.assertEqual(result['status'], 201)
         self.assertEqual(result['data'], [{"title": "What is Dev?",
                                            "creator_id": 1,
-                                           "question_id": 1,
+                                           "question_id": 2,
                                            "body": "I really like how people talk about Tony's Dev"}])
 
     # tests if a user enters an invalid token
     def user_enter_invalid_token(self):
         token = "tevlovespython"
-        response = self.client.post("api/v1/meetups/1/questions",
+        response = self.client.post("api/v1/questions",
                                     data=json.dumps(self.post_question1),
                                     headers={'x-access-token': token},
                                     content_type="application/json")
@@ -87,3 +86,21 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         self.assertEqual(response.status_code, 401)
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['message'], "Token is missing")
+
+    def test_getting_question_that_is_present(self):
+        self.user_login()
+        self.client.post("api/v1/questions", data=json.dumps(
+            self.post_question1), headers={'x-access-token': self.token}, content_type="application/json")
+        getquestion = self.client.get("/api/v1/questions/1")
+        self.assertEqual(getquestion.status_code, 200)
+        result = json.loads(getquestion.data.decode('utf-8'))
+        self.assertEqual(result['data'], [{"title": "What is Dev?",
+                                           "creator_id": 1,
+                                           "question_id": 1,
+                                           "answers": [],
+                                           "body": "I really like how people talk about Tony's Dev"}])
+
+    def test_getting_question_that_isnt_present(self):
+        self.user_login()
+        getquestion = self.client.get("/api/v1/questions/10")
+        self.assertEqual(getquestion.status_code, 404)
