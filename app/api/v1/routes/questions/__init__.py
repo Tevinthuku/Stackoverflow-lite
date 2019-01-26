@@ -3,7 +3,7 @@
 from flask import jsonify, request, make_response, abort
 
 from app.api.v1 import path_1
-from app.api.v1.model import QuestionModel, QUESTIONS
+from app.api.v1.model import QuestionModel, AnswerModel, QUESTIONS
 from app.utils import token_required, decode_token
 
 
@@ -50,6 +50,31 @@ def create_question(specific_user):
                               "creator_id": userId,
                               "question_id": len(QUESTIONS),
                               "body": body}]}), 201
+
+
+@path_1.route("/questions/<int:question_id>/answers", methods=["POST"])
+@token_required
+def create_new_answer(specific_user, question_id):
+    userId = specific_user.get("user_id")
+    try:
+        data = request.get_json()
+        answer = data['answer']
+
+    except:
+        return jsonify({"status": 400,
+                        "error": "Check your json keys. Should be topic and body"})
+
+    if not answer:
+        return jsonify({"status": 400,
+                        "error": 'answer field is required'})
+    newanswer = AnswerModel(
+        answer=answer, question_id=question_id, creator_id=userId)
+
+    newanswer.save_answer()
+
+    return jsonify({"status": 201, "data": [{
+        "answer": answer
+    }]})
 
 
 @path_1.route("/questions/<int:question_id>", methods=['GET'])

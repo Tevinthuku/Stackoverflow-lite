@@ -6,6 +6,34 @@ QUESTIONS = []
 USERS = []
 
 
+class AnswerModel:
+    def __init__(self, answer, question_id, creator_id):
+        """
+        Constructor of the answer class
+        """
+        self.answer = answer
+        self.question_id = question_id
+        self.creator_id = creator_id,
+        self.accepted = False
+
+    @staticmethod
+    def to_json(answer):
+        return {
+            "answer": answer.answer,
+            "question_id": answer.question_id,
+            "creator_id": answer.creator_id,
+            "accepted": answer.accepted
+        }
+
+    def save_answer(self):
+        for idx, question in enumerate(QUESTIONS):
+            if vars(question).get("question_id") == self.question_id:
+                newanswers = vars(question).get(
+                    "answers", []).append(self)
+                vars(question).update(answers=newanswers)
+                QUESTIONS[idx] = question
+
+
 class QuestionModel:
     def __init__(self, title, body, creator_id):
         """
@@ -33,7 +61,7 @@ class QuestionModel:
             "question_id": question.question_id,
             "title": question.title,
             "body": question.body,
-            "answers": question.answers,
+            "answers": [vars(answer) for answer in question.answers],
             "creator_id": question.creator_id
         }
 

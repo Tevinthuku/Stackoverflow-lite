@@ -29,7 +29,14 @@ class RoutesBaseTest(unittest.TestCase):
         self.post_question1 = {"title": "What is Dev?",
                                "creator_id": 1,
                                "body": "I really like how people talk about Tony's Dev"}
-
+        self.post_question2 = {"title": "Question 2",
+                               "creator_id": 1,
+                               "body": "This is question 2"}
+        self.post_question3 = {"title": "Question 3",
+                               "creator_id": 1,
+                               "body": "This is question 3"}
+        self.answer_to_question2 = {"answer": "I think the answer is ..."}
+        self.wrong_answer = {"ans": ""}
         self.token = ""
     # tear down tests
 
@@ -58,7 +65,7 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         self.assertEqual(result['status'], 201)
         self.assertEqual(result['data'], [{"title": "What is Dev?",
                                            "creator_id": 1,
-                                           "question_id": 2,
+                                           "question_id": 4,
                                            "body": "I really like how people talk about Tony's Dev"}])
 
     # tests if a user enters an invalid token
@@ -94,13 +101,40 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         getquestion = self.client.get("/api/v1/questions/1")
         self.assertEqual(getquestion.status_code, 200)
         result = json.loads(getquestion.data.decode('utf-8'))
-        self.assertEqual(result['data'], [{"title": "What is Dev?",
+        self.assertEqual(result['data'], [{"title": "Question 3",
                                            "creator_id": 1,
                                            "question_id": 1,
                                            "answers": [],
-                                           "body": "I really like how people talk about Tony's Dev"}])
+                                           "body": "This is question 3"}])
 
     def test_getting_question_that_isnt_present(self):
         self.user_login()
         getquestion = self.client.get("/api/v1/questions/10")
         self.assertEqual(getquestion.status_code, 404)
+
+    def test_create_comment_for_question(self):
+        self.user_login()
+        self.client.post("api/v1/questions", data=json.dumps(
+            self.post_question1), headers={'x-access-token': self.token}, content_type="application/json")
+        response = self.client.post("api/v1/questions/2/answers", data=json.dumps(
+            self.answer_to_question2), headers={'x-access-token': self.token}, content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 201)
+        self.assertEqual(result['data'], [
+            {
+                "answer": "I think the answer is ..."
+            }
+        ])
+
+    def test_answer_param_not_provided(self):
+        self.user_login()
+        self.client.post("api/v1/questions", data=json.dumps(
+            self.post_question3), headers={'x-access-token': self.token}, content_type="application/json")
+        response = self.client.post("api/v1/questions/3/answers", data=json.dumps(
+            self.wrong_answer), headers={'x-access-token': self.token}, content_type="application/json")
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.data.decode('utf-8'))
+        self.assertEqual(result['status'], 400)
+        self.assertEqual(
+            result['error'], "Check your json keys. Should be topic and body")
