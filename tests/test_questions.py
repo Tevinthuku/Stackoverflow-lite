@@ -64,7 +64,7 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
     # tests if a user enters an invalid token
     def user_enter_invalid_token(self):
         token = "tevlovespython"
-        response = self.client.post("api/v1/meetups/1/questions",
+        response = self.client.post("api/v1/questions",
                                     data=json.dumps(self.post_question1),
                                     headers={'x-access-token': token},
                                     content_type="application/json")
@@ -91,7 +91,7 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         self.user_login()
         self.client.post("api/v1/questions", data=json.dumps(
             self.post_question1), headers={'x-access-token': self.token}, content_type="application/json")
-        getquestion = self.client.get("/api/v1/question/1")
+        getquestion = self.client.get("/api/v1/questions/1")
         self.assertEqual(getquestion.status_code, 200)
         result = json.loads(getquestion.data.decode('utf-8'))
         self.assertEqual(result['data'], [{"title": "What is Dev?",
@@ -102,5 +102,5 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
 
     def test_getting_question_that_isnt_present(self):
         self.user_login()
-        getquestion = self.client.get("/api/v1/question/10")
+        getquestion = self.client.get("/api/v1/questions/10")
         self.assertEqual(getquestion.status_code, 404)

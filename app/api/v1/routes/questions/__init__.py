@@ -52,7 +52,7 @@ def create_question(specific_user):
                               "body": body}]}), 201
 
 
-@path_1.route("/question/<int:question_id>", methods=['GET'])
+@path_1.route("/questions/<int:question_id>", methods=['GET'])
 def get_user_get_all_questions_for_a_meetup(question_id):
     """
     User to fetch specific question
