@@ -28,6 +28,7 @@ class RoutesBaseTest(unittest.TestCase):
 
         self.post_question1 = {"title": "What is Dev?",
                                "creator_id": 1,
+                               "question_id": 1,
                                "body": "I really like how people talk about Tony's Dev"}
 
         self.token = ""
@@ -58,6 +59,7 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         self.assertEqual(result['status'], 201)
         self.assertEqual(result['data'], [{"title": "What is Dev?",
                                            "creator_id": 1,
+                                           "question_id": 1,
                                            "body": "I really like how people talk about Tony's Dev"}])
 
     # tests if a user enters an invalid token

@@ -5,11 +5,9 @@ from datetime import datetime
 QUESTIONS = []
 USERS = []
 
-print(USERS)
-
 
 class QuestionModel:
-    def __init__(self, title, body, creator_id):
+    def __init__(self, title, body, creator_id, question_id):
         """
         Constructor of the questions class
         """

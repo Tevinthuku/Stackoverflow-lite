@@ -3,7 +3,7 @@
 from flask import jsonify, request, make_response, abort
 
 from app.api.v1 import path_1
-from app.api.v1.model import QuestionModel
+from app.api.v1.model import QuestionModel, QUESTIONS
 from app.utils import token_required, decode_token
 
 
@@ -41,11 +41,13 @@ def create_question(specific_user):
 
     question = QuestionModel(title=title,
                              body=body,
-                             creator_id=userId)
+                             creator_id=userId,
+                             question_id=len(QUESTIONS) + 1)
 
     question.save_question()
 
     return jsonify({"status": 201,
                     "data": [{"title": title,
                               "creator_id": userId,
+                              "question_id": len(QUESTIONS),
                               "body": body}]}), 201
