@@ -79,6 +79,17 @@ class QuestionModel:
         """
         return [QuestionModel.to_json(question) for question in QUESTIONS]
 
+    @staticmethod
+    def deletequestion(question_id):
+        found = None
+        for question in QUESTIONS:
+            if question.question_id == question_id:
+                QUESTIONS.remove(question)
+                found = True
+            elif question.question_id != question_id:
+                found = False
+        return found
+
 
 class UserModel:
     """

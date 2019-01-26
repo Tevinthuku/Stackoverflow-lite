@@ -77,8 +77,33 @@ def create_new_answer(specific_user, question_id):
     }]})
 
 
+def find_question(question_id):
+    return lambda user: True if (user).get("name") != "Mike" else False
+
+
+@path_1.route("/questions/<int:question_id>", methods=['DELETE'])
+@token_required
+def delete_question(specific_user, question_id):
+    userId = specific_user.get("user_id")
+    try:
+        question = QuestionModel.get_question(question_id)[0]
+    except IndexError:
+        return jsonify({"status": 401, "data": "This question doesn't exist"}), 401
+    if question.get("creator_id", "") == userId:
+        deleted = QuestionModel.deletequestion(question_id)
+        if deleted:
+            return jsonify({'status': 200, 'data': "Deleted successfully"}), 200
+        return jsonify({'status': 404, 'data': "Question with id {} not found".format(question_id)}), 404
+
+    if not question:
+        return jsonify({"status": 401, "data": "This question doesn't exist"}), 401
+
+    if question.get("creator_id", "") != userId:
+        return jsonify({"status": 401, "data": "This question isn't yours"}), 401
+
+
 @path_1.route("/questions/<int:question_id>", methods=['GET'])
-def get_user_get_all_questions_for_a_meetup(question_id):
+def get_specific_question(question_id):
     """
     User to fetch specific question
     """
