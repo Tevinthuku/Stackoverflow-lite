@@ -51,8 +51,10 @@ This app is a small mimicking version of Stackoverflow where users can create ac
 | Method | Endpoint              | Description                           |
 | ------ | --------------------- | ------------------------------------- |
 | `GET`  | `/api/v1/questions`   | View All questions created in the app |
+| `POST` | `/api/v1/questions`   | Post a question                       |
 | `POST` | `/api/v1/auth/signup` | Register a user                       |
 | `POST` | `/api/v1/auth/login`  | Login a user                          |
+
 
 ### Author: TevinThuku
 
