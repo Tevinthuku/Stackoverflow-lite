@@ -1,6 +1,14 @@
+![](https://img.shields.io/pypi/pyversions/flask.svg?logo=python&style=for-the-badge)
+
+
+
 [![Build Status](https://travis-ci.org/Tevinthuku/Stackoverflow-lite.svg?branch=master)](https://travis-ci.org/Tevinthuku/Stackoverflow-lite)
 
 [![Coverage Status](https://coveralls.io/repos/github/Tevinthuku/Stackoverflow-lite/badge.svg?branch=master)](https://coveralls.io/github/Tevinthuku/Stackoverflow-lite?branch=master)
+
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/bfa3d2f3aa7f539c2f22/maintainability)](https://codeclimate.com/github/Tevinthuku/Stackoverflow-lite/maintainability)
+
 
 
 ### Stackoverflow-lite

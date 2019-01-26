@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 # local imports
 from app.api.v1.model import UserModel, USERS
 
-key = os.getenv("SECRET_KEY")
+key = os.getenv('SECRET_KEY', default="BIG-SECRET")
 
 
 def check_password(password, confirmed_password):
@@ -88,10 +88,10 @@ def token_required(f):
         try:
             data = jwt.decode(token, key)
             current_user = None
-            for user in USERS_LEN:
-                if user.username == data['username']:
+            VARUSERS = [vars(user) for user in USERS]
+            for user in VARUSERS:
+                if user.get("username") == data['username']:
                     current_user = user
-
         except:
             return jsonify({'message': 'The token is expired or invalid'}), 401
 

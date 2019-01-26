@@ -5,17 +5,16 @@ from datetime import datetime
 QUESTIONS = []
 USERS = []
 
-print(USERS)
-
 
 class QuestionModel:
-    def __init__(self, title, body):
+    def __init__(self, title, body, creator_id, question_id):
         """
         Constructor of the questions class
         """
         self.question_id = len(QUESTIONS)+1
         self.title = title
         self.body = body
+        self.creator_id = creator_id
         self.answers = []
         self.created_at = datetime.now()
 
