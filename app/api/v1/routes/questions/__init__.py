@@ -41,8 +41,7 @@ def create_question(specific_user):
 
     question = QuestionModel(title=title,
                              body=body,
-                             creator_id=userId,
-                             question_id=len(QUESTIONS) + 1)
+                             creator_id=userId)
 
     question.save_question()
 
@@ -51,3 +50,14 @@ def create_question(specific_user):
                               "creator_id": userId,
                               "question_id": len(QUESTIONS),
                               "body": body}]}), 201
+
+
+@path_1.route("/question/<int:question_id>", methods=['GET'])
+def get_user_get_all_questions_for_a_meetup(question_id):
+    """
+    User to fetch specific question
+    """
+    question = QuestionModel.get_question(question_id)
+    if question:
+        return jsonify({"status": 200, "data": question}), 200
+    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404

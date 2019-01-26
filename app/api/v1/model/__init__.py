@@ -7,7 +7,7 @@ USERS = []
 
 
 class QuestionModel:
-    def __init__(self, title, body, creator_id, question_id):
+    def __init__(self, title, body, creator_id):
         """
         Constructor of the questions class
         """
@@ -33,7 +33,8 @@ class QuestionModel:
             "question_id": question.question_id,
             "title": question.title,
             "body": question.body,
-            "answers": question.answers
+            "answers": question.answers,
+            "creator_id": question.creator_id
         }
 
     @staticmethod
