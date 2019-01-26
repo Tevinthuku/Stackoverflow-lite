@@ -113,20 +113,5 @@ def decode_token():
 # lests verify if the user is an admin or not
 
 
-def verify_if_user_is_admin(username):
-    admin = None
-    for user in USERS:
-        if username == 'blairtheadmin':
-            user.is_admin = True
-            admin = True
-        admin = False
-    return admin
-
-# check if the user is actually an admin
-
-
-def check_if_user_is_admin():
-    username = decode_token()
-    if username['username'] != "blairtheadmin":
-        return False
-    return True
+def is_user_admin(username):
+    return True if username == "Tevinthuku" else False

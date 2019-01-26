@@ -5,6 +5,8 @@ from datetime import datetime
 QUESTIONS = []
 USERS = []
 
+print(USERS)
+
 
 class QuestionModel:
     def __init__(self, title, body):
@@ -55,7 +57,7 @@ class UserModel:
     This is the user model class that contains our model setup
     """
 
-    def __init__(self, firstname, username, lastname, email, password):
+    def __init__(self, firstname, username, lastname, email, password, is_admin=False):
         """
         Start by defining each user attributes to use during the tests
         Keep in mind the user is not an admin
@@ -67,7 +69,7 @@ class UserModel:
         self.email = email
         self.registered_on = datetime.now()
         self.password = password
-        self.is_admin = False
+        self.is_admin = is_admin
 
     # after sign-up save the user to the created dict , USERS_LEN
     def save_user(self):
@@ -79,7 +81,7 @@ class UserModel:
     # lets check the data store for any user
     @staticmethod
     def query_users(username, password):
-        return [UserModel.to_json(user) for user in USERS if user.username == username and user.password == password]
+        return [UserModel.login_to_json(user) for user in USERS if user.username == username and user.password == password]
 
     # return a json data , a readable dictionary object, including the date user was registered
     @staticmethod
@@ -89,5 +91,12 @@ class UserModel:
                 "username": user.username,
                 "email": user.email,
                 "password": user.password,
+                "is_admin": user.is_admin,
+                "registered_on": user.registered_on}
 
-                "registered_on": user.registered_on, }
+    @staticmethod
+    def login_to_json(user):
+        return {
+            "username": user.username,
+            "password": user.password
+        }
