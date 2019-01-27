@@ -55,15 +55,16 @@ class TestQuestionsApiEndpoint(RoutesBaseTest):
         data = json.loads(login.data.decode('utf-8'))
         self.token = data["token"]
 
-    # tests that an unregistered user can not post a question
+    # tests that a user can delete a question.
 
     def test_user_deleting_question(self):
         self.user_login()
-        self.client.post("api/v1/questions", data=json.dumps(
+        quest = self.client.post("api/v1/questions", data=json.dumps(
             self.post_question1), headers={'x-access-token': self.token}, content_type="application/json")
+        questres = json.loads(quest.data.decode('utf-8'))
+        questionId = questres["data"][0].get("question_id")
         response = self.client.delete(
-            "api/v1/questions/1", headers={'x-access-token': self.token}, content_type="application/json")
-        self.assertEqual(response.status_code, 200)
+            "api/v1/questions/{}".format(questionId), headers={'x-access-token': self.token}, content_type="application/json")
         result = json.loads(response.data.decode('utf-8'))
         self.assertEqual(result['data'], "Deleted successfully")
 

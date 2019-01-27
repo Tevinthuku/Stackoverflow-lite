@@ -86,7 +86,7 @@ def token_required(f):
             return jsonify({'message': "Token is missing"}), 401
 
         try:
-            data = jwt.decode(token, key)
+            data = jwt.decode(token, key=key, algorithms='HS256')
             current_user = None
             VARUSERS = [vars(user) for user in USERS]
             for user in VARUSERS:
@@ -105,6 +105,7 @@ def decode_token():
     token = request.headers['x-access-token']
     try:
         username = jwt.decode(token, key)
+
     except:
         return jsonify({"message": "The token is expired or invalid"}), 401
 
