@@ -7,13 +7,14 @@ USERS = []
 
 
 class AnswerModel:
-    def __init__(self, answer, question_id, creator_id):
+    def __init__(self, answer, question_id, creator_id, answerId):
         """
         Constructor of the answer class
         """
         self.answer = answer
+        self.answerId = answerId
         self.question_id = question_id
-        self.creator_id = creator_id,
+        self.creator_id = creator_id
         self.accepted = False
 
     @staticmethod
@@ -28,10 +29,17 @@ class AnswerModel:
     def save_answer(self):
         for idx, question in enumerate(QUESTIONS):
             if vars(question).get("question_id") == self.question_id:
-                newanswers = vars(question).get(
-                    "answers", []).append(self)
+
+                if vars(question).get("answers") == None:
+                    newanswers = [self]
+                else:
+                    newanswers = vars(question).get(
+                        "answers", []).append(self)
                 vars(question).update(answers=newanswers)
                 QUESTIONS[idx] = question
+
+    def update_answer(self, newanswer):
+        self.answer = newanswer
 
 
 class QuestionModel:
@@ -39,11 +47,11 @@ class QuestionModel:
         """
         Constructor of the questions class
         """
-        self.question_id = len(QUESTIONS)+1
+        self.question_id = len(QUESTIONS)
         self.title = title
         self.body = body
         self.creator_id = creator_id
-        self.answers = []
+        self.answers = list()
         self.created_at = datetime.now()
 
     def save_question(self):
@@ -51,6 +59,24 @@ class QuestionModel:
         saves the question to the question store
         """
         QUESTIONS.append(self)
+
+    def save_answer(self, answer):
+        self.answers.append(answer)
+
+    def update_answer(self, newanswer, answer_id):
+        print(newanswer)
+        for answer in self.answers:
+            if answer.answerId == answer_id:
+                answer.update_answer(newanswer)
+
+    def upvote_answer(self, answer_id):
+        for answer in self.answers:
+            if answer.answerId == answer_id:
+                answer.accepted = True
+
+    def get_answer_object(self, answer_id):
+        print(self.answers)
+        return [answer for answer in self.answers if answer.answerId == answer_id]
 
     @staticmethod
     def to_json(question):
@@ -61,7 +87,7 @@ class QuestionModel:
             "question_id": question.question_id,
             "title": question.title,
             "body": question.body,
-            "answers": [vars(answer) for answer in question.answers],
+            "answers": [AnswerModel.to_json(answer) for answer in question.answers],
             "creator_id": question.creator_id
         }
 
@@ -71,6 +97,11 @@ class QuestionModel:
         fetch a specific question via its id
         """
         return [QuestionModel.to_json(question) for question in QUESTIONS if question.question_id == question_id]
+
+    @staticmethod
+    def get_question_object(question_id):
+
+        return [question for question in QUESTIONS if question.question_id == question_id]
 
     @staticmethod
     def get_all_questions():

@@ -29,15 +29,7 @@ def create_question(specific_user):
 
     except:
         return jsonify({'status': 400,
-                        ' error': "Check your json keys. Should be topic and body"})
-
-    if not title:
-        return jsonify({'status': 400,
-                        'error': 'topic field is required'})
-
-    if not body:
-        return jsonify({'status': 400,
-                        'error': 'body field is required'})
+                        'error': "Check your json keys. Should be topic and body"})
 
     question = QuestionModel(title=title,
                              body=body,
@@ -48,7 +40,7 @@ def create_question(specific_user):
     return jsonify({"status": 201,
                     "data": [{"title": title,
                               "creator_id": userId,
-                              "question_id": len(QUESTIONS),
+                              "question_id": len(QUESTIONS)-1,
                               "body": body}]}), 201
 
 
@@ -59,32 +51,64 @@ def create_new_answer(specific_user, question_id):
     try:
         data = request.get_json()
         answer = data['answer']
-
     except:
         return jsonify({"status": 400,
-                        "error": "Check your json keys. Should be topic and body"})
+                        "error": "Check your json keys. answer should be present"})
 
-    if not answer:
-        return jsonify({"status": 400,
-                        "error": 'answer field is required'})
-    newanswer = AnswerModel(
-        answer=answer, question_id=question_id, creator_id=userId)
-
-    newanswer.save_answer()
-
+    try:
+        question = QuestionModel.get_question_object(question_id)[0]
+        answerlen = len(vars(question).get("answers", []))
+        newanswer = AnswerModel(
+            answer=answer, question_id=question_id, creator_id=userId, answerId=answerlen)
+    except IndexError:
+        return jsonify({"status": 401, "data": "This question doesn't exist"}), 401
+    question.save_answer(newanswer)
     return jsonify({"status": 201, "data": [{
         "answer": answer
     }]})
 
 
-def find_question(question_id):
-    return lambda user: True if (user).get("name") != "Mike" else False
+@path_1.route("/questions/<int:question_id>/answers/<int:answer_id>", methods=["PUT"])
+@token_required
+def detect_app(specific_user, question_id, answer_id):
+    userId = specific_user.get("user_id")
+    try:
+        data = request.get_json()
+        newanswer = data['newanswer']
+
+    except:
+        return jsonify({"status": 400,
+                        "error": "Check your json keys. the new answer should be present"})
+
+    try:
+        question = QuestionModel.get_question_object(question_id)[0]
+    except IndexError:
+        return jsonify({"status": 401, "data": "This question doesn't exist"}), 401
+    answobj = question.get_answer_object(answer_id)
+    if userId == vars(answobj[0]).get("creator_id", ""):
+        question.update_answer(newanswer, answer_id)
+        return jsonify({
+            "status": 200,
+            "data": "Updated comment successfully"
+        }), 200
+    elif userId == question.creator_id:
+        question.upvote_answer(answer_id)
+        return jsonify({
+            "status": 200,
+            "data": "Upvoted answer"
+        }), 200
+    else:
+        return jsonify({
+            "status": 401,
+            "data": "Permission denied"
+        }), 401
 
 
 @path_1.route("/questions/<int:question_id>", methods=['DELETE'])
 @token_required
 def delete_question(specific_user, question_id):
     userId = specific_user.get("user_id")
+
     try:
         question = QuestionModel.get_question(question_id)[0]
     except IndexError:
@@ -94,9 +118,6 @@ def delete_question(specific_user, question_id):
         if deleted:
             return jsonify({'status': 200, 'data': "Deleted successfully"}), 200
         return jsonify({'status': 404, 'data': "Question with id {} not found".format(question_id)}), 404
-
-    if not question:
-        return jsonify({"status": 401, "data": "This question doesn't exist"}), 401
 
     if question.get("creator_id", "") != userId:
         return jsonify({"status": 401, "data": "This question isn't yours"}), 401
@@ -110,4 +131,4 @@ def get_specific_question(question_id):
     question = QuestionModel.get_question(question_id)
     if question:
         return jsonify({"status": 200, "data": question}), 200
-    return jsonify({"status": 404, "data": "We cant find a question for this meetup. No question posted yet"}), 404
+    return jsonify({"status": 404, "data": "We cant find this question"}), 404
