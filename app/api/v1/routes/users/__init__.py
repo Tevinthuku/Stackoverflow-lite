@@ -11,6 +11,13 @@ from app.utils import validate_email, check_password, is_user_admin
 key = os.getenv('SECRET_KEY', default="BIG-SECRET")
 
 
+def abortFn(error):
+    abort(make_response(jsonify({
+        "status": 400,
+        "error": error
+    }), 400))
+
+
 @path_1.route("/auth/signup", methods=['POST'])
 def user_sign_up():
     try:
@@ -23,8 +30,7 @@ def user_sign_up():
         is_admin = is_user_admin(username)
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     'error': "Please check your json keys and try again"}), 400))
+        abortFn("Please check your json keys and try again")
 
     # this 2 checks will throw an exception if none
     # of their requirements are met.
@@ -52,8 +58,8 @@ def user_login():
         password = request.get_json()['password']
 
     except KeyError:
-        abort(make_response(jsonify({'status': 400,
-                                     ' error': "Check your json keys and try again. Make sure it is username and password"}), 400))
+        abortFn(
+            "Check your json keys and try again. Make sure it is username and password")
 
     user = UserModel.query_users(username, password)
     if not user:

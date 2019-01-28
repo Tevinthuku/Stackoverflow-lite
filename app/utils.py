@@ -13,37 +13,41 @@ from app.api.v1.model import UserModel, USERS
 key = os.getenv('SECRET_KEY', default="BIG-SECRET")
 
 
+def abortFn(error):
+    abort(make_response(jsonify(
+        error=error), 400))
+
+
 def check_password(password, confirmed_password):
     '''
      Lets check if our passoword meets the requirements
     '''
     # check to confirm the password is of required length
     if len(password) < 8 or len(password) > 20:
-        abort(make_response(jsonify(
-            error="Password should not be less than 8 characters or exceed 20"), 400))
+        abortFn(
+            "Password should not be less than 8 characters or exceed 20")
 
     # check if password contains at least an alphabet(a-z)
     if not re.search("[a-z]", password):
-        abort(make_response(
-            jsonify(error="Password should contain a letter between a-z"), 400))
+        abortFn("Password should contain a letter between a-z")
 
     # check if password contains at least an upper case letter
     if not re.search("[A-Z]", password):
-        abort(make_response(
-            jsonify(error="Password should contain a capital letter"), 400))
+        abortFn("Password should contain a capital letter")
 
     # check if password contains at least a number(0-9)
     if not re.search("[0-9]", password):
-        abort(make_response(jsonify(error="Password should contain a number(0-9)"), 400))
+        abortFn("Password should contain a number(0-9)")
 
     # Checks if passwords provided by the users match
     if password != confirmed_password:
-        abort(make_response(jsonify(error="Your passwords don't match!"), 400))
+        abortFn("Your passwords don't match!")
 
     # If they match..
     hashed_password = generate_password_hash(password, method='sha256')
 
     return hashed_password
+
 
 # validate email
 
@@ -55,21 +59,21 @@ def validate_email(email):
 
     for user in USERS:
         if email == user.email:
-            abort(make_response(jsonify(error="Email is already taken!"), 400))
+            abortFn("Email is already taken!")
     try:
         user, domain = str(email).split("@")
     except ValueError:
-        abort(make_response(jsonify(error="Email is Invalid"), 400))
+        abortFn("Email is Invalid")
     if not user or not domain:
-        abort(make_response(jsonify(error="Email is Invalid"), 400))
+        abortFn("Email is Invalid")
 
     # Is the domain you are using valid?
     try:
         dom1, dom2 = domain.split(".")
     except ValueError:
-        abort(make_response(jsonify(error="Email is Invalid"), 400))
+        abortFn("Email is Invalid")
     if not dom1 or not dom2:
-        abort(make_response(jsonify(error="Email is Invalid"), 400))
+        abortFn("Email is Invalid")
 
     return email
 
